@@ -3,7 +3,7 @@ import './App.css';
 import React from 'react';
 import mondaySdk from "monday-sdk-js";
 import "monday-ui-react-core/dist/main.css"
-import { Button, Flex } from "monday-ui-react-core";
+import { Button, TextField, Dropdown } from "monday-ui-react-core";
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 
@@ -53,6 +53,47 @@ function App() {
       >
         <Box sx={style}>
           <header title='Manage' className="cardTitle">Add Employee</header>
+          <br/>
+          <TextField
+            name = "empIdField"
+            placeholder="Employee ID"
+          /><br/>
+          <TextField
+            name = "empNameField"
+            placeholder="Employee Name"
+          /><br/>
+          <Dropdown
+            className="dropdown-stories-styles_spacing"
+            onInputChange={function noRefCheck(){}}
+            onOptionRemove={function noRefCheck(){}}
+            onOptionSelect={function noRefCheck(){}}
+            options={[
+              {
+                label: 'Hyundai',
+                value: 1
+              },
+              {
+                label: 'Honda',
+                value: 2
+              },
+              {
+                label: 'Suzuki',
+                value: 3
+              }
+            ]}
+            placeholder="Select Car Brand"
+          />
+          <br/>
+          <TextField
+            name = "empModelField"
+            placeholder="Car Model"
+          /><br/>
+          <TextField
+            name = "empDistField"
+            placeholder="Distance"
+            type="number"
+          /><br/>
+          <Button style={{width: 400}}>Add Employee</Button>
         </Box>
       </Modal>
       <Modal
