@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import React, { useRef } from 'react';
 import mondaySdk from "monday-sdk-js";
@@ -18,6 +17,8 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import {firestore} from "./firebase";
+import {addDoc, collection} from "@firebase/firestore";
 
 function App() {
   const monday = mondaySdk();
@@ -30,6 +31,31 @@ function App() {
   const handleCloseEmp = () => setOpenEmp(false);
   const handleCloseVeh = () => setOpenVeh(false);
   const handleCloseAllow = () => setOpenAllow(false);
+  
+  const empIdRef = useRef();
+  const empNameRef = useRef();
+  const empModelRef = useRef();
+  const empBrandRef = useRef();
+  const empDistRef = useRef();
+
+  const ref = collection(firestore, "employees");
+
+  const handleSave = async(e)=>{
+      e.preventDefault();
+      let data = {
+        id: empIdRef.current.value,
+        name: empNameRef.current.value,
+        model: empModelRef.current.value,
+        distance: empDistRef.current.value
+      };
+      console.log(data);
+      try {
+          addDoc(ref,data);
+      }
+      catch(e){
+          console.log(e);
+      }
+  };
   
   const data = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"],
@@ -111,16 +137,21 @@ function App() {
         <Box sx={style}>
           <header title='Manage' className="cardTitle">Add Employee</header>
           <br/>
+          <form onSubmit={handleSave}>
           <TextField
             name = "empIdField"
             placeholder="Employee ID"
+            ref={empIdRef}
           /><br/>
           <TextField
             name = "empNameField"
             placeholder="Employee Name"
+            ref={empNameRef}
           /><br/>
           <Dropdown
+            name="empBrandField"
             className="dropdown-stories-styles_spacing"
+            ref={empBrandRef}
             onInputChange={function noRefCheck(){}}
             onOptionRemove={function noRefCheck(){}}
             onOptionSelect={function noRefCheck(){}}
@@ -144,13 +175,15 @@ function App() {
           <TextField
             name = "empModelField"
             placeholder="Car Model"
+            ref={empModelRef}
           /><br/>
           <TextField
             name = "empDistField"
             placeholder="Distance"
-            type="number"
+            ref={empDistRef}
           /><br/>
-          <Button style={{width: 400, backgroundColor:'#0a3e0a'}}>Add Employee</Button>
+          <Button type="submit" style={{width: 400, backgroundColor:'#0a3e0a'}} onClick={handleSave}>Add Employee</Button>
+          </form>
         </Box>
       </Modal>
       <Modal

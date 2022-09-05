@@ -12,6 +12,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "chart.js": "^3.9.1",
+    "firebase": "^9.9.4",
     "monday-sdk-js": "^0.1.4",
     "monday-ui-react-core": "^1.59.1",
     "react": "^18.2.0",
