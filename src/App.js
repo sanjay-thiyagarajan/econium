@@ -41,7 +41,7 @@ function App() {
         <div className='card'>
           <header title='Manage' className="cardTitle">Manage</header>
           <Button className='mgmtButtons' onClick = {handleOpenEmp} style={{backgroundColor: 'brown'}}>Add Employee</Button>
-          <Button className='mgmtButtons' onClick = {handleOpenVeh} style={{backgroundColor: 'green'}}>Add Vehicle</Button>
+          {/* <Button className='mgmtButtons' onClick = {handleOpenVeh} style={{backgroundColor: 'green'}}>Add Vehicle</Button> */}
           <Button className='mgmtButtons' onClick = {handleOpenAllow}>Add Allowance</Button>
         </div>
       </div>
