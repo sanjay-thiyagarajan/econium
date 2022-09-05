@@ -7,13 +7,14 @@
   justify-content: space-between;
 }
 .card {
-  border-radius: 5%;
-  background-color: aliceblue;
+  border-radius: 2%;
+  background-color: 'background.paper';
   display: flex;
-  margin: 2%;
+  margin: 1%;
   width: 100%;
   flex-direction: column;
   padding: 1%;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
 }
 .cardTitle{
   font-weight: bold;
@@ -24,8 +25,12 @@
 }
 .mgmtButtons {
   display: flex;
-  margin-top: 1%;
+  margin-top: 2%;
   margin-left: 2%;
   margin-right: 2%;
   margin-bottom: 1%;
+  padding:2%;
+}
+.leaderboard{
+  border-radius: 0;
 }

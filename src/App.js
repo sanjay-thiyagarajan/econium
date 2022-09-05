@@ -1,12 +1,23 @@
 import logo from './logo.svg';
 import './App.css';
-import React from 'react';
+import React, { useRef } from 'react';
 import mondaySdk from "monday-sdk-js";
 import "monday-ui-react-core/dist/main.css"
-import { Button, TextField, Dropdown } from "monday-ui-react-core";
+import { Button, TextField, Dropdown, Divider } from "monday-ui-react-core";
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-
+import DataTable from 'react-data-table-component';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
 
 function App() {
   const monday = mondaySdk();
@@ -20,12 +31,47 @@ function App() {
   const handleCloseVeh = () => setOpenVeh(false);
   const handleCloseAllow = () => setOpenAllow(false);
   
+  const data = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"],
+    datasets: [{
+      label: 'Your Company\'s Emission',
+      data: [65, 59, 80, 81, 56, 55, 40, 33, 103, 95, 223, 67],
+      fill: -1,
+      borderColor: 'rgb(75, 192, 192)',
+      backgroundColor: 'rgb(75, 192, 192)',
+      tension: 0.3
+    }]
+  };
+  
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+  );
+  
+  const tData = {
+    data: [
+      { employeeId: 1, employeeName: 'John Doe', emission: 96 },
+      { employeeId: 2, employeeName: 'Mark Alfred', emission: 234 },
+      { employeeId: 3, employeeName: 'Dark Angel', emission: 90 },
+      { employeeId: 4, employeeName: 'White Devil', emission: 543 },
+    ],
+    columns : [
+      {name:'Employee ID', selector: 'employeeId', sortable: true},
+      {name:'Employee Name', selector: 'employeeName', sortable: true},
+      {name:'Emission', selector: 'emission', sortable: true}
+    ]
+  }
+  
   const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
     bgcolor: 'background.paper',
     boxShadow: 24,
     borderRadius: 2,
@@ -37,15 +83,26 @@ function App() {
       <div className='panel-2'>
         <div className='card'>
           <header title='Manage' className="cardTitle">Leaderboard</header>
+          <Divider />
+          <DataTable
+            columns={tData.columns}
+            data={tData.data}
+            defaultSortField={tData.emission}
+            striped
+            pagination
+            className='leaderboard'
+          />
         </div>
         <div className='card'>
           <header title='Manage' className="cardTitle">Manage</header>
-          <Button className='mgmtButtons' onClick = {handleOpenEmp} style={{backgroundColor: 'brown'}}>Add Employee</Button>
+          <Divider />
+          <Button className='mgmtButtons' onClick = {handleOpenEmp} style={{backgroundColor: '#0a3e0a'}}>Add Employee</Button>
           {/* <Button className='mgmtButtons' onClick = {handleOpenVeh} style={{backgroundColor: 'green'}}>Add Vehicle</Button> */}
-          <Button className='mgmtButtons' onClick = {handleOpenAllow}>Add Allowance</Button>
+          <Button className='mgmtButtons' onClick = {handleOpenAllow} style={{backgroundColor: 'aliceblue', color: 'black', borderColor: '#0a3e0a', border: '1px solid #0a3e0a'}}>Add Allowance</Button>
         </div>
       </div>
       <div className='card'>
+        <Line type="line" data={data} style={{width: '43rem'}}/>
       </div>
       <Modal
         open={openEmp}
@@ -93,7 +150,7 @@ function App() {
             placeholder="Distance"
             type="number"
           /><br/>
-          <Button style={{width: 400}}>Add Employee</Button>
+          <Button style={{width: 400, backgroundColor:'#0a3e0a'}}>Add Employee</Button>
         </Box>
       </Modal>
       <Modal
