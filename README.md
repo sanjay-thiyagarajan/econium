@@ -1,5 +1,5 @@
 # Econium
-Emission monitoring for business
+![](https://github.com/Techipeeyon/Images/raw/main/icons/logo.png)
 
 ## :mechanical_arm: Inspiration
 
