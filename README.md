@@ -1,5 +1,5 @@
 # Econium
-![](https://github.com/Techipeeyon/Images/raw/main/icons/logo.png)
+![](https://github.com/Techipeeyon/Images/blob/main/icons/Untitled%20design.png)
 
 ## :mechanical_arm: Inspiration
 
