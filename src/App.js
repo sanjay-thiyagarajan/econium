@@ -109,12 +109,29 @@ function App() {
       label: 'Emission Level',
       data: employeeEmissions,
       fill: true,
-      borderColor: 'rgb(75, 192, 192)',
-      backgroundColor: 'rgb(75, 192, 192)',
+      borderColor: poolColors(employeeEmissions.length),
+      backgroundColor: poolColors(employeeEmissions.length),
       tension: 0.3,
       lineTension: 0.5
     }]
   };
+
+  function poolColors(a) {
+    var pool = [];
+    for(var i = 0; i < a; i++) {
+        pool.push(getRandomColor());
+    }
+    return pool;
+  }
+
+  function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
   
   ChartJS.register(
     CategoryScale,
@@ -203,10 +220,17 @@ function App() {
       </div>
       <div className='panel-2'>
         <Box className='card'>
-          <Bar data={data}/>
+          <Bar data={data} options={{plugins: {
+              legend: {
+                display: false,
+              }
+          }}} />
         </Box>
         <Box className='card'>
-          <Doughnut data={fuelPlotData} height="30%"/>
+          <Doughnut data={fuelPlotData} height="30%" options={{
+          responsive: true,
+          maintainAspectRatio: false,
+        }}/>
         </Box>
       </div>
       <Modal
