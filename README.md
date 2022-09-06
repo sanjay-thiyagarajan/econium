@@ -21,6 +21,5 @@
 
 <ul>
   <li>React</li>
-  <li>Flask</li>
   <li>Firestore</li>
 </ul>
