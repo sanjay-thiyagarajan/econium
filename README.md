@@ -23,3 +23,13 @@
   <li>React</li>
   <li>Firestore</li>
 </ul>
+
+## Crew Member
+
+<ul>
+  <li> [Sanjay Thiyagarajan](https://github.com/sanjay-thiyagarajan)</li>
+  <li> [Naresh Kumar B](https://github.com/TechieNK) </li>
+  <li> [V M Pranavan](https://github.com/Techipeeyon) </li>
+  <li> [Xavier Emmanuel E](https://github.com/Xavier-Alfred) </li>
+  <li> [Jayanth Vikash S](https://github.com/JayanthVikashS) </li>
+ </ul>
