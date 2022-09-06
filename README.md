@@ -10,5 +10,5 @@
   <li>Ozone layer depletion</li>
   <li>Lung infections</li>
   <li>Disabilities</li>
-  <li>Noice and Air pollution</li>
+  <li>Noise and Air pollution</li>
  </ul>
