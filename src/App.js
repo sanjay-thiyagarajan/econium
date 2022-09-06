@@ -18,10 +18,12 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import {firestore} from "./firebase";
-import {addDoc, collection} from "@firebase/firestore";
+import {addDoc, collection, doc} from "@firebase/firestore";
 
 function App() {
+  var ref = null;
   const monday = mondaySdk();
+  monday.setToken(process.env.REACT_APP_MONDAY_TOKEN);
   const [openEmp, setOpenEmp] = React.useState(false);
   const [openVeh, setOpenVeh] = React.useState(false);
   const [openAllow, setOpenAllow] = React.useState(false);
@@ -38,19 +40,19 @@ function App() {
   const empBrandRef = useRef();
   const empDistRef = useRef();
 
-  const ref = collection(firestore, "employees");
-
-  const handleSave = async(e)=>{
+  const handleEmpSave = async(e)=>{
       e.preventDefault();
-      let data = {
-        id: empIdRef.current.value,
-        name: empNameRef.current.value,
-        model: empModelRef.current.value,
-        distance: empDistRef.current.value
-      };
-      console.log(data);
       try {
-          addDoc(ref,data);
+        let data = {
+          id: empIdRef.current.value,
+          name: empNameRef.current.value,
+          model: empModelRef.current.value,
+          distance: empDistRef.current.value
+        };
+        monday.api(`query { users { id, name } }`).then(res => {
+          ref = collection(firestore,"companies/" + res.account_id + "/employees");
+          addDoc(ref, data);
+        });
       }
       catch(e){
           console.log(e);
@@ -137,7 +139,7 @@ function App() {
         <Box sx={style}>
           <header title='Manage' className="cardTitle">Add Employee</header>
           <br/>
-          <form onSubmit={handleSave}>
+          <form onSubmit={handleEmpSave}>
           <TextField
             name = "empIdField"
             placeholder="Employee ID"
@@ -182,7 +184,7 @@ function App() {
             placeholder="Distance"
             ref={empDistRef}
           /><br/>
-          <Button type="submit" style={{width: 400, backgroundColor:'#0a3e0a'}} onClick={handleSave}>Add Employee</Button>
+          <Button type="submit" style={{width: 400, backgroundColor:'#0a3e0a'}} onClick={handleEmpSave}>Add Employee</Button>
           </form>
         </Box>
       </Modal>
