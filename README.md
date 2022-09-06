@@ -18,3 +18,9 @@
 <p> ECONIUM is an application that estimates gas emissions from vehicles using a machine learning approach. Each employee will receive a bonus based on their emission levels, which helps to reduce pollution to some extent and demonstrates the company's commitment towards the environment. </p>
 
 ## :technologist: Tech Stack
+
+<ul>
+  <li>React</li>
+  <li>Flask</li>
+  <li>Firestore</li>
+</ul>
