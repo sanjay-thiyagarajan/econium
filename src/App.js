@@ -6,17 +6,19 @@ import { Button, TextField, Dropdown, Divider, Checkbox } from "monday-ui-react-
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import DataTable from 'react-data-table-component';
+import { useEffect } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend,
 } from 'chart.js';
-import { Line } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import {firestore} from "./firebase";
 import {addDoc, collection, getDocs} from "@firebase/firestore";
 
@@ -31,6 +33,7 @@ function App() {
   const [openVeh, setOpenVeh] = React.useState(false);
   const [openAllow, setOpenAllow] = React.useState(false);
   const [isPublic, setPublic] = React.useState(false);
+  const [eData, setEData] = React.useState([]);
   const handleOpenEmp = () => setOpenEmp(true);
   const handleOpenVeh = () => setOpenVeh(true);
   const handleOpenAllow = () => setOpenAllow(true);
@@ -49,15 +52,20 @@ function App() {
   }
   
   const fetchEmployees = async() => {
-    var eref = null;
-  
-    const querySnapshot = await getDocs(ref);
-    if (querySnapshot.exists()) {
-      console.log("Document data:", querySnapshot.data());
-    }
+    var result = [];
+    monday.api(`query { users { id, name } }`).then(async(res) => {
+      ref = collection(firestore,"companies/" + res.account_id + "/employees");
+      const querySnapshot = await getDocs(ref);
+      querySnapshot.docs.forEach((doc)=>{
+        result.push(doc.data());
+      });
+      setEData(result);
+    });
   }
   
-  fetchEmployees();
+  useEffect(()=>{
+    fetchEmployees();
+  }, []);
 
   const handleEmpSave = async(e)=>{
       e.preventDefault();
@@ -85,21 +93,25 @@ function App() {
         const cost = fuel_cost[data.fuel_type] * data.distance * car_type_cost[data.car_type];
         data['emission'] = cost;
         addDoc(ref, data);
+        handleCloseEmp();
       }
       catch(e){
           console.log(e);
       }
   };
   
+  const employeeNames = eData.map(({ name }) => name);
+  const employeeEmissions = eData.map(({ emission }) => emission);
   const data = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"],
+    labels: employeeNames,
     datasets: [{
-      label: 'Your Company\'s Emission',
-      data: [65, 59, 80, 81, 56, 55, 40, 33, 103, 95, 223, 67],
-      fill: -1,
+      label: 'Emission Level',
+      data: employeeEmissions,
+      fill: true,
       borderColor: 'rgb(75, 192, 192)',
       backgroundColor: 'rgb(75, 192, 192)',
-      tension: 0.3
+      tension: 0.3,
+      lineTension: 0.5
     }]
   };
   
@@ -108,23 +120,30 @@ function App() {
     LinearScale,
     PointElement,
     LineElement,
+    BarElement,
     Title,
     Tooltip,
     Legend
   );
   
   const tData = {
-    data: [
-      { employeeId: 1, employeeName: 'John Doe', emission: 96 },
-      { employeeId: 2, employeeName: 'Mark Alfred', emission: 234 },
-      { employeeId: 3, employeeName: 'Dark Angel', emission: 90 },
-      { employeeId: 4, employeeName: 'White Devil', emission: 543 },
-    ],
+    data: eData,
     columns : [
-      {name:'Employee ID', selector: 'employeeId', sortable: true},
-      {name:'Employee Name', selector: 'employeeName', sortable: true},
+      {name:'Employee ID', selector: 'id', sortable: true},
+      {name:'Employee Name', selector: 'name', sortable: true},
       {name:'Emission', selector: 'emission', sortable: true}
     ]
+  }
+  
+  const fuelPlotData = {
+    data: {
+      'petrol': 0,
+      'diesel': 0,
+      'lpg': 0,
+      'hybrid': 0,
+      'cng': 0,
+      'electric': 0
+    }
   }
   
   const style = {
@@ -161,9 +180,14 @@ function App() {
           <Button className='mgmtButtons' onClick = {handleOpenAllow} color = {Button.colors.POSITIVE}>Add Allowance</Button>
         </Box>
       </div>
-      <Box className='card'>
-        <Line type="line" data={data} style={{width: '43rem'}}/>
-      </Box>
+      <div className='panel-2'>
+        <Box className='card'>
+          <Bar data={data}/>
+        </Box>
+        <Box className='card'>
+          <Bar data={data}/>
+        </Box>
+      </div>
       <Modal
         open={openEmp}
         onClose={handleCloseEmp}
