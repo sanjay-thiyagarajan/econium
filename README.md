@@ -24,7 +24,7 @@
   <li>Firestore</li>
 </ul>
 
-## :man_technologist: Crew Member
+## :man_office_worker: Crew Member
  
 * [Sanjay Thiyagarajan](https://github.com/sanjay-thiyagarajan)
 * [Naresh Kumar B](https://github.com/TechieNK)
