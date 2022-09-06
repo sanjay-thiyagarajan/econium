@@ -25,11 +25,10 @@
 </ul>
 
 ## Crew Member
+ 
+* [Sanjay](https://github.com/sanjay-thiyagarajan)
+* [Naresh Kumar](https://github.com/TechieNK)
+* [V M Pranavan](https://github.com/Techipeeyon)
+* [Xavier Emmanuel E](https://github.com/Xavier-Alfred)
+* [Jayanth Vikash S](https://github.com/JayanthVikashS)
 
-<ul>
-  <li> [Sanjay Thiyagarajan](https://github.com/sanjay-thiyagarajan)</li>
-  <li> [Naresh Kumar B](https://github.com/TechieNK) </li>
-  <li> [V M Pranavan](https://github.com/Techipeeyon) </li>
-  <li> [Xavier Emmanuel E](https://github.com/Xavier-Alfred) </li>
-  <li> [Jayanth Vikash S](https://github.com/JayanthVikashS) </li>
- </ul>
