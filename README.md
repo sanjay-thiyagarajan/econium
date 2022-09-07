@@ -24,6 +24,9 @@
   <li>Firestore</li>
 </ul>
 
+## Approach
+![](https://github.com/Techipeeyon/Images/raw/main/icons/Econium%20-%20Emission%20Monitoring%20System.png)
+
 ## :blue_book: What we have learnt
 <ul>
   <li>Monday UI Core SDK</li>
