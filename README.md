@@ -16,7 +16,7 @@
  
 ## :bulb: Our Solution
 
-<p> ECONIUM is an application that estimates gas emissions from vehicles using a machine learning approach. Each employee will receive a bonus based on their emission levels, which helps to reduce pollution to some extent and demonstrates the company's commitment towards the environment. </p>
+<p> We help the businesses in encouraging their employees to minimize the use of high carbon-emitting vehicles for everyday travel. Our idea is to build a tool which helps the companies to provide bonus pay to employees based on the carbon emission of their vehicles' emission. So, When an employee emits very minimal amount of carbon, they will be getting a higher bonus and the employee emitting higher amount of carbon will be getting a minimal bonus. In this way, both the employees and the company can actively contribute in tackling the climate change. In a business perspective, the company will also obtain a good reach since it is doing something for the greater good of the people. </p>
 
 ## Approach
 ![](https://github.com/Techipeeyon/Images/raw/main/icons/11.png)
@@ -24,8 +24,10 @@
 ## :technologist: Tech Stack
 
 <ul>
-  <li>React</li>
+  <li>Monday UI Core</li>
+  <li>React JS</li>
   <li>Firestore</li>
+  <li>Material UI</li>
 </ul>
 
 ## Workflow
@@ -37,8 +39,6 @@
   <li>WorkOS</li>
   <li>Firestore implementation</li>
  </ul>
- 
-## :weight_lifting: Challenges we ran into
 
 ## :man_office_worker: Crew Member
  
