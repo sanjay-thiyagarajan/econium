@@ -97,6 +97,11 @@ function App() {
       });
       setEData(result);
       console.log(result);
+      var emissionTotal = 0;
+      for (var i=0; i < result.length; i++) {
+        emissionTotal += result[i].emission;
+      }
+      console.log(emissionTotal);//106510086000
     });
   }
   
@@ -115,32 +120,28 @@ function App() {
   const handleEmpSave = async(e)=>{
       e.preventDefault();
       try {
-        let data,cost;
         const car_type_cost = {
           'small': 1,
           'midsize': 2,
           'luxury_suv_van': 3,
           'bike':0.5
         }
+        let data = {
+          id: Number(empIdRef.current.value),
+          name: empNameRef.current.value,
+          distance: Number(empDistRef.current.value),
+          isPublic:isPublic
+        }
+        let cost = data.distance ;
         if(isPublic){
-          data = {
-            id: empIdRef.current.value,
-            name: empNameRef.current.value,
-            distance: empDistRef.current.value
-          }
-          cost = data.distance*10 ;
+          cost *= 10 ;
         }
         else{
-          data = {
-            id: empIdRef.current.value,
-            name: empNameRef.current.value,
-            car_type: carType,
-            fuel_type: fuelType,
-            distance: empDistRef.current.value
-          };
-          cost = fuel_cost[data.fuel_type] * data.distance * car_type_cost[data.car_type];
+          data['car_type']= carType;
+          data['fuel_type'] = fuelType;
+          cost *= fuel_cost[data.fuel_type] * car_type_cost[data.car_type];
         }
-        data['emission'] = cost;
+        data['emission'] = Math.round(cost);
         addDoc(ref, data);
         handleCloseEmp();
       }
@@ -177,10 +178,7 @@ function App() {
             setSearchResult(!searchResult)
         }
     }
-
     // });
-    
-
   }
 
   function poolColors(a) {
@@ -302,6 +300,12 @@ function App() {
           <PolarArea data={fuelEmissionData} height="30%" options={{
             responsive: true,
             maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: true,
+                position: "bottom"
+              },
+            },
             scales: {
               r: {
                 ticks: {
@@ -315,6 +319,12 @@ function App() {
           <PolarArea data={fuelEmissionData} height="30%" options={{
             responsive: true,
             maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: true,
+                position: "bottom"
+              },
+            },
             scales: {
               r: {
                 ticks: {
@@ -337,6 +347,12 @@ function App() {
           <Doughnut data={fuelPlotData} height="30%" options={{
           responsive: true,
           maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              position: "bottom"
+            },
+          },
         }}/>
         </Box>
       </div>
@@ -455,6 +471,7 @@ function App() {
           <p>Enter the employee ID</p>
           <TextField name="empSearchId"
           placeholder="Employee ID"
+          type="number"
           value={empID}
           onChange={setEmpID}/>
           </div>
