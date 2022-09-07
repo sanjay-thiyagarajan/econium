@@ -2,7 +2,7 @@ import './App.css';
 import React, { useRef } from 'react';
 import mondaySdk from "monday-sdk-js";
 import "monday-ui-react-core/dist/main.css"
-import { Button, TextField, Dropdown, Divider, Checkbox } from "monday-ui-react-core";
+import { Button, TextField, Dropdown, Divider, Checkbox, Flex, SplitButton } from "monday-ui-react-core";
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import DataTable from 'react-data-table-component';
@@ -14,14 +14,16 @@ import {
   LinearScale,
   PointElement,
   LineElement,
+  RadialLinearScale,
   BarElement,
   Title,
   Tooltip,
   Legend,
 } from 'chart.js';
-import { Bar, Doughnut } from 'react-chartjs-2';
+import { Bar, Doughnut, PolarArea } from 'react-chartjs-2';
 import {firestore} from "./firebase";
 import {addDoc, collection, getDocs} from "@firebase/firestore";
+import { fontSize } from '@mui/system';
 
 function App() {
   var ref = null;
@@ -53,6 +55,15 @@ function App() {
   const empNameRef = useRef();
   const empDistRef = useRef();
   
+  const fuel_cost = {
+    'petrol': 120,
+    'diesel': 132,
+    'lpg': 83,
+    'hybrid': 122.1,
+    'cng': 112,
+    'electric': 60
+  }
+  
   var carType, fuelType;
   const changeSearch = () => {
     setSearchResult(!searchResult)
@@ -68,6 +79,7 @@ function App() {
       ref = collection(firestore,"companies/" + res.account_id + "/employees");
       const querySnapshot = await getDocs(ref);
       querySnapshot.docs.forEach((doc)=>{
+        console.log(doc);
         result.push(doc.data());
       });
       setEData(result);
@@ -97,14 +109,6 @@ function App() {
           fuel_type: fuelType,
           distance: empDistRef.current.value
         };
-        const fuel_cost = {
-          'petrol': 120,
-          'diesel': 132,
-          'lpg': 83,
-          'hybrid': 122.1,
-          'cng': 112,
-          'electric': 60
-        }
         const car_type_cost = {
           'small': 1,
           'midsize': 2,
@@ -157,7 +161,11 @@ function App() {
   function poolColors(a) {
     var pool = [];
     for(var i = 0; i < a; i++) {
-        pool.push(getRandomColor());
+        var cl = getRandomColor();
+        while(pool.includes(cl)){
+          cl = getRandomColor();
+        }
+        pool.push(cl);
     }
     return pool;
   }
@@ -178,6 +186,7 @@ function App() {
     LineElement,
     ArcElement,
     BarElement,
+    RadialLinearScale,
     Title,
     Tooltip,
     Legend
@@ -203,22 +212,15 @@ function App() {
     labels: Object.keys(fuelCounts),
     datasets: [{
       data: Object.values(fuelCounts),
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 159, 64, 0.2)',
-      ],
-      borderColor: [
-        'rgba(255, 99, 132, 1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)',
-      ],
+      backgroundColor: poolColors(6),
+    }]
+  }
+  
+  const fuelEmissionData = {
+    labels: Object.keys(fuel_cost),
+    datasets: [{
+      data: Object.values(fuel_cost),
+      backgroundColor: poolColors(6),
     }]
   }
   
@@ -235,6 +237,22 @@ function App() {
   
   return (
     <div className="App">
+    <Flex>
+      <header title='EconiumTitle' className="cardTitle" style={{fontSize: 40}}>Econium</header>
+      <SplitButton
+        onClick={function noRefCheck(){}}
+        onSecondaryDialogDidHide={function noRefCheck(){}}
+        onSecondaryDialogDidShow={function noRefCheck(){}}
+        secondaryDialogContent={
+          <div style={{display: 'flex', flexDirection: 'column'}}>
+            <Button className='mgmtButtons' onClick = {handleOpenEmp} color = {Button.colors.PRIMARY}>Add Employee</Button>
+            <Button className='mgmtButtons' onClick = {handleOpenAllow} color = {Button.colors.POSITIVE}>Edit Employee Details</Button>
+          </div>
+        }
+      >
+        Manage Employee
+      </SplitButton>
+    </Flex>
       <div className='panel-2'>
         <Box className='card'>
           <header title='Manage' className="cardTitle">Leaderboard</header>
@@ -249,11 +267,30 @@ function App() {
           />
         </Box>
         <Box className='card'>
-          <header title='Manage' className="cardTitle">Manage</header>
-          <Divider />
-          <Button className='mgmtButtons' onClick = {handleOpenEmp} color = {Button.colors.PRIMARY}>Add Employee</Button>
-          {/* <Button className='mgmtButtons' onClick = {handleOpenVeh} style={{backgroundColor: 'green'}}>Add Vehicle</Button> */}
-          <Button className='mgmtButtons' onClick = {handleOpenAllow} color = {Button.colors.POSITIVE}>Edit Employee Details</Button>
+          <PolarArea data={fuelEmissionData} height="30%" options={{
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              r: {
+                ticks: {
+                  display: false
+                }
+              }
+            }
+          }}/>
+        </Box>
+        <Box className='card'>
+          <PolarArea data={fuelEmissionData} height="30%" options={{
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              r: {
+                ticks: {
+                  display: false
+                }
+              }
+            }
+          }}/>
         </Box>
       </div>
       <div className='panel-2'>
@@ -426,7 +463,7 @@ function App() {
             <Dropdown
                 name="empFuelTypeFieldEdit"
                 className="dropdown-stories-styles_spacing"
-                onChange={(e)=>setFuel_Ty(e.target.value)}
+                onChange={(e)=>setFuel_Ty(e.value)}
                 onOptionRemove={function noRefCheck(){}}
                 options={[
                   {
