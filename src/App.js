@@ -44,7 +44,7 @@ function App() {
   const [empID,setEmpID] = React.useState("");
   const [empName,setEmpName] = React.useState("");
   const [allowance,setAllowance] = React.useState(false);
-  const [dis,setDis] = React.useState("");
+  const [dis,setDis] = React.useState(0);
   const [eData, setEData] = React.useState([]);
   const [sData,setSData] = React.useState([]);
   const [percent,setPercent] = React.useState(0)
@@ -146,19 +146,23 @@ function App() {
 
   const editEmp = () =>{
     console.log(isPub);
-    if(empName==="")
+    console.log(sData);
+    if(empName=="")
       {
         setEmpName(sData.name)
         console.log(sData.name)
       }
-    if(car_ty===""){
+    if(car_ty==""){
       setCar_Ty(sData.car_type)
+      console.log(sData.car_type)
     }
-    if(dis===0 || dis===""){
-      setDis(sData.dis)
-    }
-    if(fuel_ty==="") {
+    if(fuel_ty=="") {
       setFuel_Ty(sData.fuel_type)
+      console.log(sData.fuel_type)
+    }
+    if(dis==0 || dis==""){
+      setDis(sData.dis)
+      console.log(sData.dis)
     }
     var cost=dis;
     if(isPub){
@@ -169,20 +173,34 @@ function App() {
     }
         console.log(empID,empName,car_ty,fuel_ty,dis,cost)
           var result = eData;
-          var updateVal = {}
-          for( let i =0; i<result.length; i++){
-            if(result[i].id == empID ){
-              if(isPub)
-              {
-                result[i] = {name:empName,distance:Number(dis),car_type:'public',fuel_type:'public',isPublic:true,id:Number(empID),emission:Math.round(cost)};
-                updateVal = {name:empName,distance:Number(dis),car_type:'public',fuel_type:'public',isPublic:true,id:Number(empID),emission:Math.round(cost)};
-              }
-              else{
-                result[i] = {name:empName,distance:Number(dis),car_type:car_ty.value,fuel_type:fuel_ty.value,isPublic:false,id:Number(empID),emission:Math.round(cost)}
-                updateVal = {name:empName,distance:Number(dis),car_type:car_ty.value,fuel_type:fuel_ty.value,isPublic:false,id:Number(empID),emission:Math.round(cost)};
-              }
-              }
+          var updateVal = {
+            name:empName,
+            distance:Number(dis),
+            id:Number(empID),
+            emission:Math.round(cost)
           }
+          if(isPub){
+            updateVal.car_type = "public"
+            updateVal.fuel_type = "public"
+            updateVal.isPublic = true
+          }else{
+            updateVal.car_type = car_ty.value
+            updateVal.fuel_type = fuel_ty.value
+            updateVal.isPublic = false
+          }
+          // for( let i =0; i<result.length; i++){
+          //   if(result[i].id == empID ){
+          //     if(isPub)
+          //     {
+          //       result[i] = {name:empName,distance:Number(dis),car_type:'public',fuel_type:'public',isPublic:true,id:Number(empID),emission:Math.round(cost)};
+          //       updateVal = {name:empName,distance:Number(dis),car_type:'public',fuel_type:'public',isPublic:true,id:Number(empID),emission:Math.round(cost)};
+          //     }ployees
+          //     else{
+          //       result[i] = {name:empName,distance:Number(dis),car_type:car_ty.value,fuel_type:fuel_ty.value,isPublic:false,id:Number(empID),emission:Math.round(cost)}
+          //       updateVal = {name:empName,distance:Number(dis),car_type:car_ty.value,fuel_type:fuel_ty.value,isPublic:false,id:Number(empID),emission:Math.round(cost)};
+          //     }
+          //     }
+          // }
           console.log(updateVal);  
           monday.api(`query { users { id, name } }`).then(async(res) => {
             ref = collection(firestore,"companies/" + res.account_id + "/employees");
@@ -195,10 +213,15 @@ function App() {
               }
             });
             //await updateDoc(ref,result)
-          });  
+          });
+      setCar_Ty("")
+      setEmpName("")
+      setFuel_Ty("")
+      setDis(0)  
       setSearchResult(!searchResult);
       setSData(sData);
       handleCloseAllow();
+      fetchEmployees();
   }
   const handleEmpSave = async(e)=>{
       e.preventDefault();
