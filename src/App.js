@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useRef ,useEffect} from 'react';
+import React, { useRef ,useEffect, useState} from 'react';
 import mondaySdk from "monday-sdk-js";
 import "monday-ui-react-core/dist/main.css"
 import { Button, TextField, Dropdown, Divider, Checkbox, Flex, SplitButton } from "monday-ui-react-core";
@@ -20,8 +20,9 @@ import {
   Title,
   Tooltip,
   Legend,
+  Filler,
 } from 'chart.js';
-import { Bar, Doughnut, PolarArea } from 'react-chartjs-2';
+import { Bar, Doughnut, PolarArea, Radar } from 'react-chartjs-2';
 import {firestore} from "./firebase";
 import {addDoc, collection, getDocs,doc, updateDoc } from "@firebase/firestore";
 import { writeFile, utils } from 'xlsx';
@@ -78,6 +79,14 @@ function App() {
     'bike':0.5
   }
   
+  const [bonusDetails,setBonusDetails] = useState({
+    50:0,
+    40:0,
+    30:0,
+    15:0,
+    5:0,
+  });
+
   var carType, fuelType;
   
   const changePublic = () => {
@@ -97,10 +106,24 @@ function App() {
     monday.api(`query { users { id, name } }`).then(async(res) => {
       ref = collection(firestore,"companies/" + res.account_id + "/employees");
       const querySnapshot = await getDocs(ref);
+      var updateBonus = bonusDetails;
       querySnapshot.docs.forEach((doc)=>{
-        result.push(doc.data());
+        var docData = doc.data()
+        result.push(docData);
+        if(docData.emission <=1000){
+          updateBonus[50]+=1;
+        }else if(docData.emission <=3000){
+          updateBonus[40]+=1;
+        }else if(docData.emission <=6000){
+          updateBonus[30]+=1;
+        }else if(docData.emission <=10000){
+          updateBonus[15]+=1;
+        }else{
+          updateBonus[5]+=1;
+        }
       });
       setEData(result);
+      setBonusDetails(updateBonus);
       var emissionTotal = 0;
       for (var i=0; i < result.length; i++) {
         emissionTotal += result[i].emission;
@@ -159,7 +182,6 @@ function App() {
                 updateVal = {name:empName,distance:Number(dis),car_type:car_ty.value,fuel_type:fuel_ty.value,isPublic:false,id:Number(empID),emission:Math.round(cost)};
               }
               }
-            
           }
           console.log(updateVal);  
           monday.api(`query { users { id, name } }`).then(async(res) => {
@@ -176,13 +198,14 @@ function App() {
           });  
       setSearchResult(!searchResult);
       setSData(sData);
+      handleCloseAllow();
   }
   const handleEmpSave = async(e)=>{
       e.preventDefault();
 
       try {
         let data = {
-          id: Number(empIdRef.current.value),
+          id: Number(eData.length+1),
           name: empNameRef.current.value,
           distance: Number(empDistRef.current.value),
           isPublic:isPublic
@@ -271,7 +294,8 @@ function App() {
     RadialLinearScale,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    Filler
   );
   
   const tData = {
@@ -290,6 +314,15 @@ function App() {
     fuelCounts[f] = fuelCounts[f] ? fuelCounts[f] + 1 : 1;
   }
 
+  const bonusPlotData = {
+    labels: Object.keys(bonusDetails),
+    datasets: [{
+      data: Object.values(bonusDetails),
+      backgroundColor: poolColors(5),
+      label:"Bonus Range Distribution"
+    }]
+  }
+
   const fuelPlotData = {
     labels: Object.keys(fuelCounts),
     datasets: [{
@@ -303,6 +336,7 @@ function App() {
     datasets: [{
       data: Object.values(fuel_cost),
       backgroundColor: poolColors(7),
+      label:"Fuel-wise Emission"
     }]
   }
   
@@ -338,7 +372,7 @@ function App() {
           Employee Data
           </SplitButton>
         </Flex>
-        <Box className='card' style={{backgroundImage: `url(${ecoBg})`, backgroundPosition: 'center center', marginLeft: 30, height: 'inherit', alignItems: 'center', display: 'inline-flex', color: 'white', borderRadius: 10, fontSize: 20, height: 100, justifyContent: 'center'}}>
+        <Box className='card' style={{backgroundImage: `url(${ecoBg})`, backgroundPosition: 'center center', marginLeft: 30, alignItems: 'center', display: 'inline-flex', color: 'white', borderRadius: 10, fontSize: 20, height: 100, justifyContent: 'center'}}>
           <Flex>Your company's carbon emission is &nbsp; <span style={{fontSize: 35}}>{percent}%</span> &nbsp; lesser when compared to the average emission</Flex>
         </Box>
       </Flex>
@@ -356,9 +390,9 @@ function App() {
           />
         </Box>
         <Box className='card'>
-          <PolarArea data={fuelEmissionData} height="30%" options={{
-            responsive: true,
-            maintainAspectRatio: false,
+          <header title='Manage' className="cardTitle">Fuel-wise Emission</header>
+          <Divider />
+          <PolarArea data={fuelEmissionData} options={{
             plugins: {
               legend: {
                 display: true,
@@ -375,9 +409,9 @@ function App() {
           }}/>
         </Box>
         <Box className='card'>
-          <PolarArea data={fuelEmissionData} height="30%" options={{
-            responsive: true,
-            maintainAspectRatio: false,
+          <header title='Manage' className="cardTitle">Bonus Range Distribution</header>
+          <Divider />
+          <Radar data={bonusPlotData} options={{
             plugins: {
               legend: {
                 display: true,
@@ -426,8 +460,8 @@ function App() {
           <TextField
             name = "empIdField"
             placeholder="Employee ID"
-            ref={empIdRef}
-            type="number"
+            value={"Employee ID: "+(eData.length+1)}
+            disabled={true}
           /><br/>
           <TextField
             name = "empNameField"
