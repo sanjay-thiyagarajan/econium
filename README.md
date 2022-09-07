@@ -18,7 +18,7 @@
 
 <p> We help the businesses in encouraging their employees to minimize the use of high carbon-emitting vehicles for everyday travel. Our idea is to build a tool which helps the companies to provide bonus pay to employees based on the carbon emission of their vehicles' emission. So, When an employee emits very minimal amount of carbon, they will be getting a higher bonus and the employee emitting higher amount of carbon will be getting a minimal bonus. In this way, both the employees and the company can actively contribute in tackling the climate change. In a business perspective, the company will also obtain a good reach since it is doing something for the greater good of the people. </p>
 
-## Approach
+## ⚒️Approach
 ![](https://github.com/Techipeeyon/Images/raw/main/icons/11.png)
 
 ## :technologist: Tech Stack
@@ -30,7 +30,7 @@
   <li>Material UI</li>
 </ul>
 
-## Workflow
+## 🈺 Workflow
 ![](https://github.com/Techipeeyon/Images/raw/main/icons/summma.png)
 
 ## :blue_book: What we have learnt
