@@ -6,6 +6,7 @@ import { Button, TextField, Dropdown, Divider, Checkbox, Flex, SplitButton } fro
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import DataTable from 'react-data-table-component';
+import ecoBg from './assets/ecobg.jpg';
 import { useEffect } from 'react';
 import {
   Chart as ChartJS,
@@ -249,22 +250,28 @@ function App() {
   
   return (
     <div className="App">
-    <Flex>
-      <header title='EconiumTitle' className="cardTitle" style={{fontSize: 40}}>Econium</header>
-      <SplitButton
-        onClick={ExportData}
-        onSecondaryDialogDidHide={function noRefCheck(){}}
-        onSecondaryDialogDidShow={function noRefCheck(){}}
-        secondaryDialogContent={
-          <div style={{display: 'flex', flexDirection: 'column'}}>
-            <Button className='mgmtButtons' onClick = {handleOpenEmp} color = {Button.colors.PRIMARY}>Add Employee</Button>
-            <Button className='mgmtButtons' onClick = {handleOpenAllow} color = {Button.colors.POSITIVE}>Edit Employee Details</Button>
-          </div>
-        }
-      >
-      Employee Data
-      </SplitButton>
-    </Flex>
+      <Flex style={{paddingTop: 20, paddingLeft: 20}}>
+        <Flex direction={Flex.directions.COLUMN} style={{marginLeft: 30}}>
+          <header title='EconiumTitle' className="cardTitle" style={{fontSize: 40, marginRight: 10, marginBottom: 20}}>Econium</header>
+          <SplitButton
+            onClick={ExportData}
+            color={Button.colors.POSITIVE}
+            onSecondaryDialogDidHide={function noRefCheck(){}}
+            onSecondaryDialogDidShow={function noRefCheck(){}}
+            secondaryDialogContent={
+              <div style={{display: 'flex', flexDirection: 'column'}}>
+                <Button className='mgmtButtons' onClick = {handleOpenEmp} color = {Button.colors.PRIMARY}>Add Employee</Button>
+                <Button className='mgmtButtons' onClick = {handleOpenAllow} color = {Button.colors.POSITIVE}>Edit Employee Details</Button>
+              </div>
+            }
+          >
+          Employee Data
+          </SplitButton>
+        </Flex>
+        <Box className='card' style={{backgroundImage: `url(${ecoBg})`, backgroundPosition: 'center center', marginLeft: 30, height: 'inherit', alignItems: 'center', display: 'inline-flex', color: 'white', borderRadius: 10, fontSize: 20, height: 100, justifyContent: 'center'}}>
+          <Flex>Your company's carbon emission is &nbsp; <span style={{fontSize: 35}}>5%</span> &nbsp; lesser when compared to the average emission</Flex>
+        </Box>
+      </Flex>
       <div className='panel-2'>
         <Box className='card'>
           <header title='Manage' className="cardTitle">Leaderboard</header>
