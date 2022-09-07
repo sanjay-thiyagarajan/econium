@@ -100,7 +100,7 @@ function App() {
         emissionTotal += result[i].emission;
       }
       var diff;
-      var emission_avg = 106510086000;
+      var emission_avg = 1065100;
       if(emissionTotal<=emission_avg){
         diff = emission_avg - emissionTotal;
       }
@@ -181,7 +181,7 @@ function App() {
     //     result.push(doc.data());
     //   })
       for (var i=0; i < result.length; i++) {
-        if (result[i].id === empId) {
+        if (result[i].id == empId) {
             setSData(result[i]);
             setSearchResult(!searchResult)
         }
@@ -270,7 +270,7 @@ function App() {
     <div className="App">
       <Flex style={{paddingTop: 20, paddingLeft: 20}}>
         <Flex direction={Flex.directions.COLUMN} style={{marginLeft: 30}}>
-          <header title='EconiumTitle' className="cardTitle" style={{fontSize: 40, marginRight: 10, marginBottom: 20}}>Econium</header>
+          <header title='EconiumTitle' className="cardTitle" style={{fontSize: 40, marginRight: 10, marginBottom: 20, color: 'green'}}>Econium</header>
           <SplitButton
             onClick={ExportData}
             color={Button.colors.POSITIVE}
