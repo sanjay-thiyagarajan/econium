@@ -129,7 +129,7 @@ function App() {
         emissionTotal += result[i].emission;
       }
       var diff;
-      var emission_avg = 1065100;
+      var emission_avg = 2065100;
       if(emissionTotal<=emission_avg){
         diff = emission_avg - emissionTotal;
       }
