@@ -26,7 +26,9 @@
 
 ## What we have learnt
 <ul>
-  <li>  </li>
+  <li>Monday UI Core SDK</li>
+  <li>WorkOS</li>
+  <li>Firestore implementation</li>
  </ul>
 
 ## :man_office_worker: Crew Member
