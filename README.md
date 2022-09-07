@@ -25,7 +25,7 @@
 </ul>
 
 ## Approach
-![](https://github.com/Techipeeyon/Images/raw/main/icons/Econium%20-%20Emission%20Monitoring%20System.png)
+![](https://github.com/Techipeeyon/Images/raw/main/icons/1.png)
 
 ## :blue_book: What we have learnt
 <ul>
