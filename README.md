@@ -30,6 +30,8 @@
   <li>WorkOS</li>
   <li>Firestore implementation</li>
  </ul>
+ 
+## :weight_lifting: Challenges we ran into
 
 ## :man_office_worker: Crew Member
  
