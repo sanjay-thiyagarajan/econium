@@ -30,23 +30,33 @@ function App() {
   monday.api(`query { users { id, name } }`).then(res => {
     ref = collection(firestore,"companies/" + res.account_id + "/employees");
   });
+  const [car_ty,setCar_Ty] = React.useState("");
+  const [fuel_ty,setFuel_Ty] = React.useState("");
   const [openEmp, setOpenEmp] = React.useState(false);
   const [openVeh, setOpenVeh] = React.useState(false);
   const [openAllow, setOpenAllow] = React.useState(false);
   const [isPublic, setPublic] = React.useState(false);
+  const [empID,setEmpID] = React.useState("");
+  const [empName,setEmpName] = React.useState("");
+  const [dis,setDis] = React.useState("");
   const [eData, setEData] = React.useState([]);
+  const [sData,setSData] = React.useState([]);
+  const [searchResult,setSearchResult] = React.useState(false);
   const handleOpenEmp = () => setOpenEmp(true);
   const handleOpenVeh = () => setOpenVeh(true);
   const handleOpenAllow = () => setOpenAllow(true);
   const handleCloseEmp = () => setOpenEmp(false);
   const handleCloseVeh = () => setOpenVeh(false);
-  const handleCloseAllow = () => setOpenAllow(false);
+  const handleCloseAllow = () => {setOpenAllow(false);setSearchResult(false);}
   
   const empIdRef = useRef();
   const empNameRef = useRef();
   const empDistRef = useRef();
   
   var carType, fuelType;
+  const changeSearch = () => {
+    setSearchResult(!searchResult)
+  }
   
   const changePublic = () => {
     setPublic(!isPublic);
@@ -61,6 +71,7 @@ function App() {
         result.push(doc.data());
       });
       setEData(result);
+      console.log(result);
     });
   }
   
@@ -68,6 +79,14 @@ function App() {
     fetchEmployees();
   }, []);
 
+    function editEmp(updatedEmp){
+      ref
+      .doc(updatedEmp.id)
+      .update(updatedEmp)
+      .catch((err)=>
+        alert(err)
+        )
+    }
   const handleEmpSave = async(e)=>{
       e.preventDefault();
       try {
@@ -115,6 +134,25 @@ function App() {
       lineTension: 0.5
     }]
   };
+  const employeeDetails = async(empId) =>{
+    var result = eData;
+    // monday.api(`query { users { id, name } }`).then(async(res) => {
+    //   ref = collection(firestore,"companies/" + res.account_id + "/employees");
+    //   const querySnapshot = await getDocs(ref);
+    //   querySnapshot.docs.forEach((doc)=>{
+    //     result.push(doc.data());
+    //   })
+      for (var i=0; i < result.length; i++) {
+        if (result[i].id === empId) {
+            setSData(result[i]);
+            setSearchResult(!searchResult)
+        }
+    }
+
+    // });
+    
+
+  }
 
   function poolColors(a) {
     var pool = [];
@@ -215,7 +253,7 @@ function App() {
           <Divider />
           <Button className='mgmtButtons' onClick = {handleOpenEmp} color = {Button.colors.PRIMARY}>Add Employee</Button>
           {/* <Button className='mgmtButtons' onClick = {handleOpenVeh} style={{backgroundColor: 'green'}}>Add Vehicle</Button> */}
-          <Button className='mgmtButtons' onClick = {handleOpenAllow} color = {Button.colors.POSITIVE}>Add Allowance</Button>
+          <Button className='mgmtButtons' onClick = {handleOpenAllow} color = {Button.colors.POSITIVE}>Edit Employee Details</Button>
         </Box>
       </div>
       <div className='panel-2'>
@@ -338,7 +376,97 @@ function App() {
         onClose={handleCloseAllow}
       >
         <Box sx={style}>
-          <header title='Manage' className="cardTitle">Add Allowance</header>
+          <header title='Manage' className="cardTitle">Enter Employee ID</header>
+          <div className="empSearch" style={!searchResult ? {} : { display: 'none' }}>
+          <p>Enter the employee ID</p>
+          <TextField name="empSearchId"
+          placeholder="Employee ID"
+          value={empID}
+          onChange={setEmpID}/>
+          </div>
+          <Button type="submit" style={!searchResult ? {width:150,marginLeft:110} : { display: 'none' }} color={Button.colors.POSITIVE} onClick={()=>{employeeDetails(empID)}}>Search Employee</Button>          
+          <div style={searchResult ? {} : { display: 'none' }}>
+          <div>
+              <p>Employee ID :{sData.id}</p>
+            </div>
+              <p>Employee Name: {sData.name}</p> 
+              <TextField
+               name="name"
+               placeholder="Enter the Employee Name"
+               onChange={(e)=>setEmpName(e.target.value)} 
+               />
+            
+            <br/>
+            <p>Car Type: {sData.car_type}</p>
+            <Dropdown
+              name="empCarTypeFieldEdit"
+              className="dropdown-stories-styles_spacing"
+              onChange={(e)=>{setCar_Ty(e)}}
+              onOptionRemove={function noRefCheck(){}}
+              onOptionSelect={function noRefCheck(){}}
+              options={[
+                {
+                  label: 'small',
+                  value: 'small'
+                },
+                {
+                  label: 'midsize',
+                  value: 'midsize'
+                },
+                {
+                  label: 'luxury_suv_van',
+                  value: 'luxury_suv_van'
+                }
+              ]}
+              placeholder="Select Car type"
+            />
+            <br/>
+            
+            <p>Fuel Type: {sData.fuel_type}</p>
+            <Dropdown
+                name="empFuelTypeFieldEdit"
+                className="dropdown-stories-styles_spacing"
+                onChange={(e)=>setFuel_Ty(e.target.value)}
+                onOptionRemove={function noRefCheck(){}}
+                options={[
+                  {
+                    label: 'petrol',
+                    value: 'petrol'
+                  },
+                  {
+                    label: 'diesel',
+                    value: 'diesel'
+                  },
+                  {
+                    label: 'hybrid',
+                    value: 'hybrid'
+                  },
+                  {
+                    label: 'lpg',
+                    value: 'lpg'
+                  },
+                  {
+                    label: 'cng',
+                    value: 'cng'
+                  },
+                  {
+                    label: 'electric',
+                    value: 'electric'
+                  }
+                ]}
+                placeholder="Select Fuel type"
+              />
+              <p>Distance: {sData.distance}</p>
+              <TextField
+                name = "empDistField"
+                placeholder="Distance"
+                type="number"
+                onChange={(e)=>setDis(e.target.value)}
+          /><br/>
+          <Button type="submit" onClick={()=>{
+            editEmp({id:sData.id,name:empName,car_type:car_ty,fuel_type:fuel_ty,distance:dis})
+          }} style={{width: 400}} color={Button.colors.PRIMARY}>Edit</Button>
+          </div>
         </Box>
       </Modal>
     </div>
