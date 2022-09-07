@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useRef } from 'react';
+import React, { useRef ,useEffect} from 'react';
 import mondaySdk from "monday-sdk-js";
 import "monday-ui-react-core/dist/main.css"
 import { Button, TextField, Dropdown, Divider, Checkbox, Flex, SplitButton } from "monday-ui-react-core";
@@ -8,7 +8,6 @@ import Box from '@mui/material/Box';
 import DataTable from 'react-data-table-component';
 import ecoBg from './assets/ecobg.jpg';
 import Allowance from './Allowance';
-import { useEffect } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -24,7 +23,7 @@ import {
 } from 'chart.js';
 import { Bar, Doughnut, PolarArea } from 'react-chartjs-2';
 import {firestore} from "./firebase";
-import {addDoc, collection, getDocs} from "@firebase/firestore";
+import {addDoc, collection, getDocs,doc, updateDoc } from "@firebase/firestore";
 import { writeFile, utils } from 'xlsx';
 
 function App() {
@@ -40,6 +39,7 @@ function App() {
   const [openVeh, setOpenVeh] = React.useState(false);
   const [openAllow, setOpenAllow] = React.useState(false);
   const [isPublic, setPublic] = React.useState(false);
+  const [isPub, setIsPub] = React.useState(false);
   const [empID,setEmpID] = React.useState("");
   const [empName,setEmpName] = React.useState("");
   const [allowance,setAllowance] = React.useState(false);
@@ -70,6 +70,12 @@ function App() {
     'cng': 112,
     'electric': 60,
     'public': 0
+  }
+  const car_type_cost = {
+    'small': 1,
+    'midsize': 2,
+    'luxury_suv_van': 3,
+    'bike':0.5
   }
   
   var carType, fuelType;
@@ -115,23 +121,66 @@ function App() {
     fetchEmployees();
   }, []);
 
-    function editEmp(updatedEmp){
-      ref
-      .doc(updatedEmp.id)
-      .update(updatedEmp)
-      .catch((err)=>
-        alert(err)
-        )
+  const editEmp = () =>{
+    console.log(isPub);
+    if(empName==="")
+      {
+        setEmpName(sData.name)
+        console.log(sData.name)
+      }
+    if(car_ty===""){
+      setCar_Ty(sData.car_type)
     }
+    if(dis===0 || dis===""){
+      setDis(sData.dis)
+    }
+    if(fuel_ty==="") {
+      setFuel_Ty(sData.fuel_type)
+    }
+    var cost=dis;
+    if(isPub){
+      cost*=10
+    }
+    else{
+      cost *= fuel_cost[fuel_ty.value] * car_type_cost[car_ty.value];
+    }
+        console.log(empID,empName,car_ty,fuel_ty,dis,cost)
+          var result = eData;
+          var updateVal = {}
+          for( let i =0; i<result.length; i++){
+            if(result[i].id == empID ){
+              if(isPub)
+              {
+                result[i] = {name:empName,distance:Number(dis),car_type:'public',fuel_type:'public',isPublic:true,id:Number(empID),emission:Math.round(cost)};
+                updateVal = {name:empName,distance:Number(dis),car_type:'public',fuel_type:'public',isPublic:true,id:Number(empID),emission:Math.round(cost)};
+              }
+              else{
+                result[i] = {name:empName,distance:Number(dis),car_type:car_ty.value,fuel_type:fuel_ty.value,isPublic:false,id:Number(empID),emission:Math.round(cost)}
+                updateVal = {name:empName,distance:Number(dis),car_type:car_ty.value,fuel_type:fuel_ty.value,isPublic:false,id:Number(empID),emission:Math.round(cost)};
+              }
+              }
+            
+          }
+          console.log(updateVal);  
+          monday.api(`query { users { id, name } }`).then(async(res) => {
+            ref = collection(firestore,"companies/" + res.account_id + "/employees");
+            const querySnapshot = await getDocs(ref);
+            querySnapshot.docs.forEach(async(doc_)=>{
+              if(doc_.data().id==empID){
+                console.log(doc_.id)
+                const employeeRef = doc(firestore, "companies/" + res.account_id + "/employees",doc_.id);
+                await updateDoc(employeeRef, updateVal);
+              }
+            });
+            //await updateDoc(ref,result)
+          });  
+      setSearchResult(!searchResult);
+      setSData(sData);
+  }
   const handleEmpSave = async(e)=>{
       e.preventDefault();
+
       try {
-        const car_type_cost = {
-          'small': 1,
-          'midsize': 2,
-          'luxury_suv_van': 3,
-          'bike':0.5
-        }
         let data = {
           id: Number(empIdRef.current.value),
           name: empNameRef.current.value,
@@ -182,8 +231,10 @@ function App() {
     //   })
       for (var i=0; i < result.length; i++) {
         if (result[i].id == empId) {
-            setSData(result[i]);
-            setSearchResult(!searchResult)
+          setSData(result[i]);
+          setSearchResult(!searchResult);
+          setIsPub(result[i].isPublic);
+          console.log(result[i].isPublic);
         }
     }
     // });
@@ -466,7 +517,7 @@ function App() {
         onClose={handleCloseAllow}
       >
         <Box sx={style}>
-          <header title='Manage' className="cardTitle">Enter Employee ID</header>
+          <header title='Manage' style={!searchResult ? {} : { display: 'none' }} className="cardTitle">Enter Employee ID</header>
           <div className="empSearch" style={!searchResult ? {} : { display: 'none' }}>
           <p>Enter the employee ID</p>
           <TextField name="empSearchId"
@@ -483,16 +534,25 @@ function App() {
               <p>Employee Name: {sData.name}</p> 
               <TextField
                name="name"
+               value={sData.name}
                placeholder="Enter the Employee Name"
-               onChange={(e)=>setEmpName(e.target.value)} 
+               onChange={setEmpName} 
                />
-            
             <br/>
+            <Checkbox
+            isPub
+            label="Public Transport"
+            onChange={()=>{setIsPub(!isPub)
+            console.log(!isPub
+              )}}
+            checked={isPub}
+          />
             <p>Car Type: {sData.car_type}</p>
             <Dropdown
               name="empCarTypeFieldEdit"
               className="dropdown-stories-styles_spacing"
-              onChange={(e)=>{setCar_Ty(e)}}
+              //v={sData.car_type}
+              onChange={setCar_Ty}
               onOptionRemove={function noRefCheck(){}}
               onOptionSelect={function noRefCheck(){}}
               options={[
@@ -517,7 +577,8 @@ function App() {
             <Dropdown
                 name="empFuelTypeFieldEdit"
                 className="dropdown-stories-styles_spacing"
-                onChange={(e)=>setFuel_Ty(e.value)}
+                //value={sData.fuel_type}
+                onChange={setFuel_Ty}
                 onOptionRemove={function noRefCheck(){}}
                 options={[
                   {
@@ -552,10 +613,11 @@ function App() {
                 name = "empDistField"
                 placeholder="Distance"
                 type="number"
-                onChange={(e)=>setDis(e.target.value)}
+                value={sData.distance}
+                onChange={setDis}
           /><br/>
           <Button type="submit" onClick={()=>{
-            editEmp({id:sData.id,name:empName,car_type:car_ty,fuel_type:fuel_ty,distance:dis})
+            editEmp()
           }} style={{width: 400}} color={Button.colors.PRIMARY}>Edit</Button>
           </div>
         </Box>
