@@ -28,7 +28,7 @@
 </ul>
 
 ## Workflow
-![](https://github.com/Techipeeyon/Images/raw/main/icons/2.png)
+![](https://github.com/Techipeeyon/Images/raw/main/icons/summma.png)
 
 ## :blue_book: What we have learnt
 <ul>
