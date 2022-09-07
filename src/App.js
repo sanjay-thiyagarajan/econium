@@ -47,7 +47,10 @@ function App() {
   const handleOpenEmp = () => setOpenEmp(true);
   const handleOpenVeh = () => setOpenVeh(true);
   const handleOpenAllow = () => setOpenAllow(true);
-  const handleCloseEmp = () => setOpenEmp(false);
+  const handleCloseEmp = () => {
+    setOpenEmp(false);
+    fetchEmployees();
+  }
   const handleCloseVeh = () => setOpenVeh(false);
   const handleCloseAllow = () => {setOpenAllow(false);setSearchResult(false);}
   
@@ -260,7 +263,7 @@ function App() {
           <DataTable
             columns={tData.columns}
             data={tData.data}
-            defaultSortField={tData.emission}
+            defaultSortFieldId={3}
             striped
             pagination
             className='leaderboard'
