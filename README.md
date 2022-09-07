@@ -24,7 +24,7 @@
   <li>Firestore</li>
 </ul>
 
-## What we have learnt
+## :blue_book: What we have learnt
 <ul>
   <li>Monday UI Core SDK</li>
   <li>WorkOS</li>
