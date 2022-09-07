@@ -47,6 +47,7 @@ function App() {
   const [dis,setDis] = React.useState("");
   const [eData, setEData] = React.useState([]);
   const [sData,setSData] = React.useState([]);
+  const [percent,setPercent] = React.useState(0)
   const [searchResult,setSearchResult] = React.useState(false);
   const handleOpenEmp = () => setOpenEmp(true);
   const handleOpenVeh = () => setOpenVeh(true);
@@ -101,7 +102,16 @@ function App() {
       for (var i=0; i < result.length; i++) {
         emissionTotal += result[i].emission;
       }
-      console.log(emissionTotal);//106510086000
+      console.log(emissionTotal);
+      var diff;
+      var emission_avg = 106510086000;
+      if(emissionTotal<=emission_avg){
+        diff = emission_avg - emissionTotal;
+      }
+      else{
+        diff = emissionTotal - emission_avg;
+      }
+      setPercent(Math.round((diff/emission_avg)*100));
     });
   }
   
@@ -280,7 +290,7 @@ function App() {
           </SplitButton>
         </Flex>
         <Box className='card' style={{backgroundImage: `url(${ecoBg})`, backgroundPosition: 'center center', marginLeft: 30, height: 'inherit', alignItems: 'center', display: 'inline-flex', color: 'white', borderRadius: 10, fontSize: 20, height: 100, justifyContent: 'center'}}>
-          <Flex>Your company's carbon emission is &nbsp; <span style={{fontSize: 35}}>5%</span> &nbsp; lesser when compared to the average emission</Flex>
+          <Flex>Your company's carbon emission is &nbsp; <span style={{fontSize: 35}}>{percent}%</span> &nbsp; lesser when compared to the average emission</Flex>
         </Box>
       </Flex>
       <div className='panel-2'>
