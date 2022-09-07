@@ -4,7 +4,7 @@
 
 ## :mechanical_arm: Inspiration
 
-<p>Cars are a major contributor to air pollution producing significant amounts of nitrogen oxides, carbon monoxide, and particulate matter. Nearly 80-90% of cars' environmental impact comes from fuel consumption and emissions of air pollution and greenhouse gases.</p>
+<p>When talking about air pollution and its major contributors, cars are the first things that come to mind, producing significant amounts of nitrogen oxides, carbon monoxide, and particulate matter. Nearly 80-90% of cars' environmental impact comes from fuel consumption and emissions of air pollution and greenhouse gases.</p>
 
 ## :face_with_head_bandage: Effects
 <ul>
@@ -16,7 +16,7 @@
  
 ## :bulb: Our Solution
 
-<p> We help the businesses in encouraging their employees to minimize the use of high carbon-emitting vehicles for everyday travel. Our idea is to build a tool which helps the companies to provide bonus pay to employees based on the carbon emission of their vehicles' emission. So, When an employee emits very minimal amount of carbon, they will be getting a higher bonus and the employee emitting higher amount of carbon will be getting a minimal bonus. In this way, both the employees and the company can actively contribute in tackling the climate change. In a business perspective, the company will also obtain a good reach since it is doing something for the greater good of the people. </p>
+<p> We help the businesses in encouraging their employees to minimize their use of high carbon-emitting vehicles for everyday travel. Our idea is to build a tool which helps companies in providing bonus pay to employees based on the carbon emission of their vehicles. So, when an employee emits very minimal amount of carbon, they will be provided with a higher bonus and the employee emitting higher amount of carbon will be getting a comparatively minimal bonus. This way we can ensure that both the employees and the company can actively participate in the fight against climate change. When considering the business perspective, the company will also be seen in a better light by the public, as it is doing something for the greater good of the world. </p>
 
 ## ⚒️Approach
 ![](https://github.com/Techipeeyon/Images/raw/main/icons/11.png)
@@ -42,9 +42,9 @@
  
 ## 🤔What's next for Econium
 <ul>
-  <li>Smart transport recommendation to employees based on vehicle emission</li>
-  <li>Inter-company comparisons in a gamified manner</li>
-  <li>AI based car pooling with respect to travel routes</li>
+  <li>Smart transport recommendation to employees based on their vehicle emission</li>
+  <li>Inter-company comparisons provided in a gamified manner</li>
+  <li>AI based car pooling with respect to travel routes between employees</li>
  </ul>
 
 ## :man_office_worker: Crew Member
