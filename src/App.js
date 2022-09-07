@@ -7,6 +7,7 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import DataTable from 'react-data-table-component';
 import ecoBg from './assets/ecobg.jpg';
+import Allowance from './Allowance';
 import { useEffect } from 'react';
 import {
   Chart as ChartJS,
@@ -42,6 +43,7 @@ function App() {
   const [isPublic, setPublic] = React.useState(false);
   const [empID,setEmpID] = React.useState("");
   const [empName,setEmpName] = React.useState("");
+  const [allowance,setAllowance] = React.useState(false);
   const [dis,setDis] = React.useState("");
   const [eData, setEData] = React.useState([]);
   const [sData,setSData] = React.useState([]);
@@ -71,9 +73,6 @@ function App() {
   }
   
   var carType, fuelType;
-  const changeSearch = () => {
-    setSearchResult(!searchResult)
-  }
   
   const changePublic = () => {
     setPublic(!isPublic);
@@ -275,6 +274,7 @@ function App() {
               <div style={{display: 'flex', flexDirection: 'column'}}>
                 <Button className='mgmtButtons' onClick = {handleOpenEmp} color = {Button.colors.PRIMARY}>Add Employee</Button>
                 <Button className='mgmtButtons' onClick = {handleOpenAllow} color = {Button.colors.POSITIVE}>Edit Employee Details</Button>
+                <Button className='mgmtButtons' onClick = {()=>{setAllowance(!allowance)}} color = {Button.colors.NEGATIVE}>Add Allowance</Button>
               </div>
             }
           >
@@ -543,6 +543,7 @@ function App() {
           </div>
         </Box>
       </Modal>
+      <Allowance setAllowance={setAllowance} allowance={allowance}/>
     </div>
   );
 }
