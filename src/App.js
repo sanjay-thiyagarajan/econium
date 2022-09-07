@@ -262,7 +262,7 @@ function App() {
           </div>
         }
       >
-        Manage Employee
+      Employee Data
       </SplitButton>
     </Flex>
       <div className='panel-2'>
