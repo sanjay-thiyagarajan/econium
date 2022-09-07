@@ -70,7 +70,8 @@ function App() {
     'lpg': 83,
     'hybrid': 122.1,
     'cng': 112,
-    'electric': 60
+    'electric': 60,
+    'public': 0
   }
   
   var carType, fuelType;
@@ -93,16 +94,13 @@ function App() {
       ref = collection(firestore,"companies/" + res.account_id + "/employees");
       const querySnapshot = await getDocs(ref);
       querySnapshot.docs.forEach((doc)=>{
-        console.log(doc);
         result.push(doc.data());
       });
       setEData(result);
-      console.log(result);
       var emissionTotal = 0;
       for (var i=0; i < result.length; i++) {
         emissionTotal += result[i].emission;
       }
-      console.log(emissionTotal);
       var diff;
       var emission_avg = 106510086000;
       if(emissionTotal<=emission_avg){
@@ -145,6 +143,8 @@ function App() {
         let cost = data.distance ;
         if(isPublic){
           cost *= 10 ;
+          data['car_type']= 'public';
+          data['fuel_type'] = 'public';
         }
         else{
           data['car_type']= carType;
@@ -245,7 +245,7 @@ function App() {
     labels: Object.keys(fuelCounts),
     datasets: [{
       data: Object.values(fuelCounts),
-      backgroundColor: poolColors(6),
+      backgroundColor: poolColors(7),
     }]
   }
   
@@ -253,7 +253,7 @@ function App() {
     labels: Object.keys(fuel_cost),
     datasets: [{
       data: Object.values(fuel_cost),
-      backgroundColor: poolColors(6),
+      backgroundColor: poolColors(7),
     }]
   }
   
