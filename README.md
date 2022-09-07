@@ -39,6 +39,13 @@
   <li>WorkOS</li>
   <li>Firestore implementation</li>
  </ul>
+ 
+## 🤔What's next for Econium
+<ul>
+  <li>Smart transport recommendation to employees based on vehicle emission</li>
+  <li>Inter-company comparisons in a gamified manner</li>
+  <li>AI based car pooling with respect to travel routes</li>
+ </ul>
 
 ## :man_office_worker: Crew Member
  
