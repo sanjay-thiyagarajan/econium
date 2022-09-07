@@ -24,6 +24,7 @@ import { Bar, Doughnut, PolarArea } from 'react-chartjs-2';
 import {firestore} from "./firebase";
 import {addDoc, collection, getDocs} from "@firebase/firestore";
 import { fontSize } from '@mui/system';
+import { writeFile, utils } from 'xlsx';
 
 function App() {
   var ref = null;
@@ -74,6 +75,14 @@ function App() {
   
   const changePublic = () => {
     setPublic(!isPublic);
+  }
+  
+  const ExportData = () => {
+    const filename='report.xlsx';
+    var ws = utils.json_to_sheet(eData);
+    var wb = utils.book_new();
+    utils.book_append_sheet(wb, ws, "People");
+    writeFile(wb,filename);
   }
   
   const fetchEmployees = async() => {
@@ -243,7 +252,7 @@ function App() {
     <Flex>
       <header title='EconiumTitle' className="cardTitle" style={{fontSize: 40}}>Econium</header>
       <SplitButton
-        onClick={function noRefCheck(){}}
+        onClick={ExportData}
         onSecondaryDialogDidHide={function noRefCheck(){}}
         onSecondaryDialogDidShow={function noRefCheck(){}}
         secondaryDialogContent={
