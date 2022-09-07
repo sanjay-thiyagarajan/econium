@@ -25,7 +25,6 @@ import {
 import { Bar, Doughnut, PolarArea } from 'react-chartjs-2';
 import {firestore} from "./firebase";
 import {addDoc, collection, getDocs} from "@firebase/firestore";
-import { fontSize } from '@mui/system';
 import { writeFile, utils } from 'xlsx';
 
 function App() {
@@ -50,7 +49,6 @@ function App() {
   const [percent,setPercent] = React.useState(0)
   const [searchResult,setSearchResult] = React.useState(false);
   const handleOpenEmp = () => setOpenEmp(true);
-  const handleOpenVeh = () => setOpenVeh(true);
   const handleOpenAllow = () => setOpenAllow(true);
   const handleCloseEmp = () => {
     setOpenEmp(false);
@@ -461,14 +459,6 @@ function App() {
           /><br/>
           <Button type="submit" style={{width: 400}} color={Button.colors.PRIMARY}>Add Employee</Button>
           </form>
-        </Box>
-      </Modal>
-      <Modal
-        open={openVeh}
-        onClose={handleCloseVeh}
-      >
-        <Box sx={style}>
-          <header title='Manage' className="cardTitle">Add Vehicle</header>
         </Box>
       </Modal>
       <Modal

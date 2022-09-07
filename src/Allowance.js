@@ -21,9 +21,11 @@ export default function Allowance({setAllowance, allowance}) {
         width: 'max-content'
       };
       const rows = [
-        { id: 1, start: 'Hello', end: 'World', bonus: 'a' },
-        { id: 2, start: 'DataGridPro', end: 'is Awesome', bonus: 'a' },
-        { id: 3, start: 'MUI', end: 'is Amazing', bonus: 'a' },
+        { id: 1, start: 0, end: 1000, bonus: 50 },
+        { id: 2, start: 1001, end: 3000, bonus: 40 },
+        { id: 3, start: 3001, end: 6000, bonus: 30 },
+        { id: 4, start: 6001, end: 10000, bonus: 15 },
+        { id: 5, start: 10001, end: 100000, bonus: 5 },
       ];
       
       const columns = [
