@@ -51,6 +51,7 @@ function App() {
   const handleOpenAllow = () => setOpenAllow(true);
   const handleCloseEmp = () => {
     setOpenEmp(false);
+    setPublic(false);
     fetchEmployees();
   }
   const handleCloseVeh = () => setOpenVeh(false);
@@ -115,19 +116,31 @@ function App() {
   const handleEmpSave = async(e)=>{
       e.preventDefault();
       try {
-        let data = {
-          id: empIdRef.current.value,
-          name: empNameRef.current.value,
-          car_type: carType,
-          fuel_type: fuelType,
-          distance: empDistRef.current.value
-        };
+        let data,cost;
         const car_type_cost = {
           'small': 1,
           'midsize': 2,
-          'luxury_suv_van': 3
+          'luxury_suv_van': 3,
+          'bike':0.5
         }
-        const cost = fuel_cost[data.fuel_type] * data.distance * car_type_cost[data.car_type];
+        if(isPublic){
+          data = {
+            id: empIdRef.current.value,
+            name: empNameRef.current.value,
+            distance: empDistRef.current.value
+          }
+          cost = data.distance*10 ;
+        }
+        else{
+          data = {
+            id: empIdRef.current.value,
+            name: empNameRef.current.value,
+            car_type: carType,
+            fuel_type: fuelType,
+            distance: empDistRef.current.value
+          };
+          cost = fuel_cost[data.fuel_type] * data.distance * car_type_cost[data.car_type];
+        }
         data['emission'] = cost;
         addDoc(ref, data);
         handleCloseEmp();
@@ -339,6 +352,7 @@ function App() {
             name = "empIdField"
             placeholder="Employee ID"
             ref={empIdRef}
+            type="number"
           /><br/>
           <TextField
             name = "empNameField"
@@ -369,6 +383,10 @@ function App() {
                 {
                   label: 'luxury_suv_van',
                   value: 'luxury_suv_van'
+                },
+                {
+                  label: 'bike',
+                  value: 'bike'
                 }
               ]}
               placeholder="Select Car type"
